@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>万程OA</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <h1 class="login-title">万程OA平台</h1>
+            <div class="input-group">
+                <label>工号</label>
+                <input type="text" id="workId" placeholder="请输入工号">
+            </div>
+            <div class="input-group">
+                <label>密码</label>
+                <input type="password" id="password" placeholder="请输入密码">
+            </div>
+            <button class="login-btn" onclick="login()">登录</button>
+        </div>
+    </div>
+
+    <div id="mainPage" class="main-container">
+        <div id="messagePage" class="message-container">
+            <!-- 添加消息分类切换 -->
+            <div class="message-tabs">
+                <div class="tabs-container">
+                    <div class="tab-title center-title">
+                        <span>消息</span>
+                    </div>
+                </div>
+                <div class="add-btn" onclick="showMessageOptions()">
+                    <i class="ri-add-line"></i>
+                </div>
+            </div>
+
+            <!-- 添加消息操作选项弹窗 -->
+            <div class="message-options-modal" id="messageOptionsModal" style="display: none;">
+                <div class="options-list">
+                    <div class="option-item" onclick="handleScan()">
+                        <i class="ri-qr-scan-line"></i>
+                        <span>扫一扫</span>
+                    </div>
+                    <div class="option-item" onclick="createGroupChat()">
+                        <i class="ri-group-line"></i>
+                        <span>创建群聊</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 消息列表容器 -->
+            <div class="message-content">
+                <!-- 暂无消息提示 -->
+                <div class="empty-message" style="display: none;">
+                    <i class="ri-message-3-line"></i>
+                    <p>暂无消息</p>
+                </div>
+
+                <!-- 消息列表（默认隐藏） -->
+                <div class="message-list">
+                    <!-- 我的待办聊天卡片 -->
+                    <div class="message-item">
+                        <div class="avatar-container">
+                            <img src="https://s1.imagehub.cc/images/2024/12/02/25bccdf8b573d99bf0b1c520a74ce677.png" alt="我的待办" class="avatar">
+                        </div>
+                        <div class="message-info">
+                            <div class="message-header">
+                                <span class="contact-name">我的待办</span>
+                                <span class="message-time">09:00</span>
+                            </div>
+                            <div class="message-preview">您有3条待办事项需要处理</div>
+                        </div>
+                    </div>
+                    <!-- 王建丽的聊天框 -->
+                    <div class="message-item">
+                        <div class="avatar-container">
+                            <img src="https://s1.imagehub.cc/images/2024/11/26/260383d17e7ad6193503f67267e9be5a.webp" alt="王建丽" class="avatar">
+                        </div>
+                        <div class="message-info">
+                            <div class="message-header">
+                                <span class="contact-name">王建丽(15023)</span>
+                                <span class="message-time">08:30</span>
+                            </div>
+                            <div class="message-preview">好的，收到了。</div>
+                        </div>
+                    </div>
+                    <!-- 许静的聊天框 -->
+                    <div class="message-item">
+                        <div class="avatar-container">
+                            <img src="https://s1.imagehub.cc/images/2024/11/26/cc91ad7859152fffed46ae67b00d2029.webp" alt="许静" class="avatar">
+                        </div>
+                        <div class="message-info">
+                            <div class="message-header">
+                                <span class="contact-name">许静(13578)</span>
+                                <span class="message-time">08:15</span>
+                            </div>
+                            <div class="message-preview">请查看一下附件。</div>
+                        </div>
+                    </div>
+                    <!-- 其他消息列表内容... -->
+                </div>
+            </div>
+        </div>
+
+        <div id="workspacePage" class="workspace-container" style="display: none;">
+            <div class="function-container">
+                <div class="search-box">
+                    <i class="ri-search-line"></i>
+                    <input type="text" placeholder="搜索功能/应用">
+                </div>
+
+                <!-- 添加轮播图容器 -->
+                <div class="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="https://s1.imagehub.cc/images/2024/12/01/891722c8c14c2ef976bf9ab8acafe4a5.png" alt="轮播图1">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://s1.imagehub.cc/images/2024/12/01/f870c346871b4363559e917ac5dec957.png" alt="轮播图2">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://s1.imagehub.cc/images/2024/12/01/fa154b5427b031e0adeb903d5a62465d.png" alt="轮播图3">
+                        </div>
+                    </div>
+                    <div class="carousel-indicators">
+                        <span class="indicator active"></span>
+                        <span class="indicator"></span>
+                        <span class="indicator"></span>
+                    </div>
+                </div>
+
+                <div class="user-welcome">
+                    <div class="welcome-text">
+                        <span class="greeting">姚家荣(12001)同学</span>
+                        <span class="work-days" id="welcomeWorkDays">今天是你入职的第0天</span>
+                    </div>
+                    <div class="daily-motto" id="welcomeMotto"></div>
+                </div>
+                
+                <!-- 主要功能区域 -->
+                <div class="function-grid main-functions">
+                    <div class="function-item">
+                        <img src="https://s1.imagehub.cc/images/2024/12/01/fa4f10db41520a1a981fff1ecfb82bf2.png" alt="审批">
+                        <span>审批</span>
+                    </div>
+                    <div class="function-item">
+                        <img src="https://s1.imagehub.cc/images/2024/12/01/2f05b771064fda02e3b2a368d6c30f28.png" alt="申请">
+                        <span>申请</span>
+                    </div>
+                    <div class="function-item">
+                        <img src="https://s1.imagehub.cc/images/2024/12/01/63be57eec21c152efe9383885343cf9b.png" alt="打卡">
+                        <span>打卡</span>
+                    </div>
+                </div>
+
+                <!-- 修改次要功能区域为滚动公栏 -->
+                <div class="notice-scroll-container">
+                    <div class="notice-scroll-header">
+                        <div class="header-left">
+                            <img src="https://s1.imagehub.cc/images/2024/12/01/b1807129accca4c711161d8ab410c623.png" alt="公告" class="header-icon">
+                            <span class="title">公告</span>
+                        </div>
+                        <span class="more">更多 <i class="ri-arrow-right-s-line"></i></span>
+                    </div>
+                    <div class="notice-scroll-content">
+                        <div class="notice-scroll-list">
+                            <div class="notice-item">
+                                <span class="notice-title">关于2024年元旦放假安排的通知</span>
+                                <div class="notice-info">
+                                    <span class="notice-time">2023-12-25</span>
+                                    <span class="notice-author">行政部</span>
+                                </div>
+                            </div>
+                            <div class="notice-item">
+                                <span class="notice-title">关于开展年度员工满意度调查的通知</span>
+                                <div class="notice-info">
+                                    <span class="notice-time">2023-12-20</span>
+                                    <span class="notice-author">人事部</span>
+                                </div>
+                            </div>
+                            <div class="notice-item">
+                                <span class="notice-title">2024年度工作计划会议通知</span>
+                                <div class="notice-info">
+                                    <span class="notice-time">2023-12-18</span>
+                                    <span class="notice-author">总经办</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 在滚动公告栏下方添加制度容器 -->
+                <div class="article-container">
+                    <div class="article-header">
+                        <div class="header-left">
+                            <img src="https://s1.imagehub.cc/images/2024/12/01/8e90ac733aa6fadff6ee2bd06981fa3a.png" alt="制度" class="header-icon">
+                            <span class="title">制度</span>
+                        </div>
+                        <span class="more">更多 <i class="ri-arrow-right-s-line"></i></span>
+                    </div>
+                    <div class="article-list">
+                        <div class="article-item">
+                            <div class="article-info">
+                                <div class="article-title">员工手册V2.0</div>
+                                <div class="article-meta">
+                                    <span class="author"><i class="ri-user-3-line"></i>人事部</span>
+                                    <span class="time"><i class="ri-time-line"></i>2023-12-25 14:30</span>
+                                    <span class="views"><i class="ri-eye-line"></i>238</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="article-item">
+                            <div class="article-info">
+                                <div class="article-title">考勤管理制度（2024版）</div>
+                                <div class="article-meta">
+                                    <span class="author"><i class="ri-user-3-line"></i>人事部</span>
+                                    <span class="time"><i class="ri-time-line"></i>2023-12-20 09:15</span>
+                                    <span class="views"><i class="ri-eye-line"></i>186</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="article-item">
+                            <div class="article-info">
+                                <div class="article-title">办公室管理规定</div>
+                                <div class="article-meta">
+                                    <span class="author"><i class="ri-user-3-line"></i>行政部</span>
+                                    <span class="time"><i class="ri-time-line"></i>2023-12-18 16:45</span>
+                                    <span class="views"><i class="ri-eye-line"></i>165</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="clockPage" class="clock-container" style="display: none;">
+            <div class="gesture-area"></div>
+            
+            <div class="user-card">
+                <div class="user-info-row">
+                    <span class="label">姓名：</span>
+                    <span class="value">姚家荣</span>
+                </div>
+                <div class="user-info-row">
+                    <span class="label">工号：</span>
+                    <span class="value">12001</span>
+                </div>
+                <div class="user-info-row">
+                    <span class="label">部门：</span>
+                    <span class="value">总经办</span>
+                </div>
+            </div>
+            
+            <div class="clock-actions">
+                <div class="clock-time">
+                    <div id="currentTime" class="time">--:--:--</div>
+                    <div id="currentDate" class="date">---- 年 -- 月 -- 日</div>
+                </div>
+                <div class="clock-buttons">
+                    <button class="clock-btn clock-in" onclick="clockIn()">上班打卡</button>
+                    <button class="clock-btn clock-out" onclick="clockOut()">下班打卡</button>
+                </div>
+                <button class="repair-btn" onclick="showRepairForm()">补卡申请</button>
+            </div>
+            
+            <div class="clock-records">
+                <div class="records-header">
+                    <h3>打卡记录</h3>
+                </div>
+                <div class="records-list" id="clockRecords">
+                    <!-- 打卡记录将通过 JavaScript 动态添加 -->
+                </div>
+            </div>
+        </div>
+
+        <nav class="nav-bar">
+            <a href="#" class="nav-item active" onclick="switchPage('message')">
+                <i class="ri-message-3-line"></i>
+                <span>消息</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchPage('workspace')">
+                <i class="ri-apps-line"></i>
+                <span>工作台</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchPage('contacts')">
+                <i class="ri-contacts-book-line"></i>
+                <span>通讯录</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchPage('discover')">
+                <i class="ri-compass-3-line"></i>
+                <span>发现</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchPage('profile')">
+                <i class="ri-user-line"></i>
+                <span>我的</span>
+            </a>
+        </nav>
+
+        <div id="profilePage" class="profile-container" style="display: none;">
+            <div class="profile-menu">
+                <div class="menu-item" onclick="showPersonalInfo()">
+                    <span>个人资料</span>
+                    <i class="ri-arrow-right-s-line"></i>
+                </div>
+            </div>
+            <div class="logout-section">
+                <button class="logout-btn" onclick="logout()">退出登录</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加模态弹窗 -->
+    <div class="modal-overlay" id="clockModal">
+        <div class="modal-content">
+            <div class="modal-message" id="modalMessage"></div>
+            <button class="modal-btn" onclick="closeModal()">确定</button>
+        </div>
+    </div>
+
+    <!-- 补卡申请页面 -->
+    <div id="repairPage" class="repair-container" style="display: none;">
+        <div class="page-header">
+            <i class="ri-arrow-left-line" onclick="backToClockPage()"></i>
+            <span>补卡申请</span>
+        </div>
+        
+        <div class="repair-form">
+            <div class="form-item">
+                <label>请编号</label>
+                <input type="text" id="repairId" readonly>
+            </div>
+            <div class="form-item">
+                <label>申请时间</label>
+                <input type="text" id="applyTime" readonly>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>姓名</label>
+                    <input type="text" value="姚家荣" readonly>
+                </div>
+                <div class="info-half">
+                    <label>工号</label>
+                    <input type="text" value="12001" readonly>
+                </div>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>部门</label>
+                    <input type="text" value="总经办" readonly>
+                </div>
+                <div class="info-half">
+                    <label>职级</label>
+                    <input type="text" value="M1" readonly>
+                </div>
+            </div>
+            <div class="form-item">
+                <label>补卡日期</label>
+                <input type="date" id="repairDate" required>
+            </div>
+            <div class="form-item">
+                <label>补卡时间</label>
+                <input type="time" id="repairTime" required>
+            </div>
+            <div class="form-item">
+                <label>补卡理由</label>
+                <textarea id="repairReason" placeholder="请输入补卡理由" required></textarea>
+            </div>
+            <button class="submit-btn" onclick="submitRepairForm()">提交申请</button>
+        </div>
+    </div>
+
+    <!-- 修改补卡申请成功弹窗 -->
+    <div class="modal-overlay" id="repairModal">
+        <div class="modal-content success-modal">
+            <div class="success-message">
+                <span class="success-text">提交成功！</span><br><br>
+                您已提交补卡申请，请您耐心等待审批...
+            </div>
+            <button class="modal-btn" onclick="closeRepairModal()">确定</button>
+        </div>
+    </div>
+
+    <!-- 申请分类弹窗 -->
+    <div class="modal-overlay" id="applyModal">
+        <div class="modal-content apply-modal">
+            <div class="apply-grid">
+                <div class="apply-item">
+                    <img src="https://s1.imagehub.cc/images/2024/12/01/c5f6079c1424f286bf346b2d5cd41673.png" alt="考勤申请">
+                    <span>考勤申请</span>
+                </div>
+                <div class="apply-item">
+                    <img src="https://s1.imagehub.cc/images/2024/12/01/6f4c7728be3c8fad93ca16186111dac9.png" alt="工申请">
+                    <span>工作申请</span>
+                </div>
+                <div class="apply-item">
+                    <img src="https://s1.imagehub.cc/images/2024/12/01/b0e17c538060da207b16a62c0cea4392.png" alt="人事申请">
+                    <span>人事申请</span>
+                </div>
+                <div class="apply-item">
+                    <img src="https://s1.imagehub.cc/images/2024/12/01/15a25645884980e4bca5ce390089d31e.png" alt="行政请">
+                    <span>行政申请</span>
+                </div>
+                <div class="apply-item">
+                    <img src="https://s1.imagehub.cc/images/2024/12/01/9fcbd5e03bd6da08246bf49964b08bb7.png" alt="财务申请">
+                    <span>财务申请</span>
+                </div>
+                <div class="apply-item">
+                    <img src="https://s1.imagehub.cc/images/2024/12/01/4666ca2edec1ad9effd66e9c00c8176d.png" alt="质检申请">
+                    <span>质检申请</span>
+                </div>
+                <div class="apply-item">
+                    <img src="https://s1.imagehub.cc/images/2024/12/01/6f33bec2c6ffa124c08fec16059fc508.png" alt="公文申请">
+                    <span>公文申请</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 在 applyModal 前添加考勤申请页面 -->
+    <div id="attendancePage" class="attendance-container" style="display: none;">
+        <div class="page-header">
+            <i class="ri-arrow-left-line" onclick="closeAttendancePage()"></i>
+            <span>考勤申请</span>
+        </div>
+        
+        <div class="attendance-grid">
+            <div class="attendance-item" onclick="showAttendanceForm('请假')">
+                <div class="attendance-icon">
+                    <img src="https://s1.imagehub.cc/images/2024/12/01/4d5ba3c434c0419f0978884c8b4e73cf.png" alt="请假">
+                </div>
+                <div class="attendance-info">
+                    <span class="title">请假</span>
+                    <span class="desc">事假/病假/婚假等</span>
+                </div>
+                <i class="ri-arrow-right-s-line"></i>
+            </div>
+            
+            <div class="attendance-item" onclick="showAttendanceForm('换班')">
+                <div class="attendance-icon">
+                    <img src="https://s1.imagehub.cc/images/2024/12/01/1923fc7fe4f8c00295a9ca275397721e.png" alt="换班">
+                </div>
+                <div class="attendance-info">
+                    <span class="title">换班</span>
+                    <span class="desc">调整工作班次</span>
+                </div>
+                <i class="ri-arrow-right-s-line"></i>
+            </div>
+            
+            <div class="attendance-item" onclick="showAttendanceForm('排休')">
+                <div class="attendance-icon">
+                    <img src="https://s1.imagehub.cc/images/2024/12/01/186e37eed042ffa20661de81d95aed98.png" alt="排休">
+                </div>
+                <div class="attendance-info">
+                    <span class="title">排休</span>
+                    <span class="desc">安排休息日期</span>
+                </div>
+                <i class="ri-arrow-right-s-line"></i>
+            </div>
+            
+            <div class="attendance-item" onclick="showAttendanceForm('加班')">
+                <div class="attendance-icon">
+                    <img src="https://s1.imagehub.cc/images/2024/12/01/feea1d516353e866fa7ddd961986e3a3.png" alt="加班">
+                </div>
+                <div class="attendance-info">
+                    <span class="title">加班</span>
+                    <span class="desc">延长工作时间</span>
+                </div>
+                <i class="ri-arrow-right-s-line"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加请假申请页面 -->
+    <div id="leavePage" class="leave-container" style="display: none;">
+        <div class="page-header">
+            <i class="ri-arrow-left-line" onclick="closeLeaveForm()"></i>
+            <span>请假申请</span>
+        </div>
+        
+        <div class="leave-form">
+            <div class="form-item">
+                <label>申请编号</label>
+                <input type="text" id="leaveId" readonly>
+            </div>
+            <div class="form-item">
+                <label>申请时间</label>
+                <input type="text" id="leaveApplyTime" readonly>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>姓名</label>
+                    <input type="text" value="姚家荣" readonly>
+                </div>
+                <div class="info-half">
+                    <label>工号</label>
+                    <input type="text" value="12001" readonly>
+                </div>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>部门</label>
+                    <input type="text" value="总经办" readonly>
+                </div>
+                <div class="info-half">
+                    <label>职级</label>
+                    <input type="text" value="M1" readonly>
+                </div>
+            </div>
+            
+            <!-- 请假类型选择 -->
+            <div class="form-item">
+                <label>请假类型</label>
+                <div class="leave-type-grid">
+                    <div class="leave-type-item" onclick="selectLeaveType(this, '事假')">
+                        <span>事假</span>
+                    </div>
+                    <div class="leave-type-item" onclick="selectLeaveType(this, '病假')">
+                        <span>病假</span>
+                    </div>
+                    <div class="leave-type-item" onclick="selectLeaveType(this, '年假')">
+                        <span>年假</span>
+                    </div>
+                    <div class="leave-type-item" onclick="selectLeaveType(this, '哺乳假')">
+                        <span>哺乳假</span>
+                    </div>
+                    <div class="leave-type-item" onclick="selectLeaveType(this, '丧假')">
+                        <span>丧假</span>
+                    </div>
+                    <div class="leave-type-item" onclick="selectLeaveType(this, '婚假')">
+                        <span>婚假</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 时间选择 -->
+            <div class="form-item">
+                <label>开始日期</label>
+                <input type="date" id="leaveStartTime" onchange="calculateDays()" required>
+            </div>
+            <div class="form-item">
+                <label>结束日期</label>
+                <input type="date" id="leaveEndTime" onchange="calculateDays()" required>
+            </div>
+            <div class="form-item">
+                <label>请假时长</label>
+                <input type="text" id="leaveDuration" readonly>
+            </div>
+
+            <!-- 请假理由 -->
+            <div class="form-item">
+                <label>请假理由</label>
+                <textarea id="leaveReason" placeholder="请输入请假理由" required></textarea>
+            </div>
+
+            <!-- 附件传 -->
+            <div class="form-item">
+                <label>附件上传</label>
+                <div class="upload-box" onclick="triggerFileUpload()">
+                    <i class="ri-upload-2-line"></i>
+                    <span>点击上传附件</span>
+                    <input type="file" id="fileUpload" style="display: none;" onchange="handleFileUpload(this)">
+                </div>
+                <div id="fileList" class="file-list"></div>
+            </div>
+
+            <button class="submit-btn" onclick="submitLeaveForm()">提交申请</button>
+        </div>
+    </div>
+
+    <!-- 添加个人资料详情页面 -->
+    <div id="personalInfoPage" class="personal-info-container" style="display: none;">
+        <div class="gesture-area"></div>
+        <div class="page-header">
+            <i class="ri-arrow-left-line" onclick="closePersonalInfo()"></i>
+            <span>个人资料</span>
+        </div>
+        
+        <div class="info-list">
+            <div class="info-item">
+                <label>入职时间</label>
+                <span>2022-12-07</span>
+            </div>
+            <div class="info-item">
+                <label>入职天数</label>
+                <span id="workDays">计算中...</span>
+            </div>
+            <div class="info-item">
+                <label>入职部门</label>
+                <span>总经办</span>
+            </div>
+            <div class="info-item">
+                <label>手机号码</label>
+                <span>166****1223</span>
+            </div>
+            <div class="info-item">
+                <label>身份证号码</label>
+                <span>450502********1516</span>
+            </div>
+            <div class="info-item">
+                <label>家庭地址</label>
+                <span>北海市海城区庙山高阳村48号</span>
+            </div>
+            <div class="info-item">
+                <label>紧急联系人</label>
+                <span>姚军 (父亲) 183****1011</span>
+            </div>
+            <div class="info-item">
+                <label>年龄</label>
+                <span id="age">计算中...</span>
+            </div>
+            <div class="info-item">
+                <label>出生年月</label>
+                <span>1993-12-23</span>
+            </div>
+            <div class="info-item">
+                <label>生日</label>
+                <span>12月23日</span>
+            </div>
+            <div class="info-item">
+                <label>性别</label>
+                <span>男</span>
+            </div>
+            <div class="info-item">
+                <label>银行卡号</label>
+                <div class="bank-info">
+                    <span class="bank-name">中国邮政储蓄银行</span>
+                    <span class="card-number">6229 **** **** 2219</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加调休申请页面 -->
+    <div id="adjustRestPage" class="adjust-rest-container" style="display: none;">
+        <div class="page-header">
+            <i class="ri-arrow-left-line" onclick="closeAdjustRestForm()"></i>
+            <span>调休申请</span>
+        </div>
+        
+        <div class="adjust-rest-form">
+            <div class="form-item">
+                <label>申请编号</label>
+                <input type="text" id="adjustRestId" readonly>
+            </div>
+            <div class="form-item">
+                <label>申请时间</label>
+                <input type="text" id="adjustRestApplyTime" readonly>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>姓名</label>
+                    <input type="text" value="姚家荣" readonly>
+                </div>
+                <div class="info-half">
+                    <label>工号</label>
+                    <input type="text" value="12001" readonly>
+                </div>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>部门</label>
+                    <input type="text" value="总经办" readonly>
+                </div>
+                <div class="info-half">
+                    <label>职级</label>
+                    <input type="text" value="M1" readonly>
+                </div>
+            </div>
+
+            <!-- 被调休人选择 -->
+            <div class="form-item">
+                <label>被调休人</label>
+                <div class="select-person" onclick="showEmployeeSelector()">
+                    <i class="ri-add-line"></i>
+                    <span>选择被调休人</span>
+                </div>
+            </div>
+            <div class="form-item user-info-flex target-info" style="display: none;">
+                <div class="selected-person">
+                    <img src="https://s1.imagehub.cc/images/2024/12/01/2cb9218af26caa69cf1cb58b96431647.png" class="avatar" alt="avatar">
+                    <div class="person-info">
+                        <div class="name">未选择</div>
+                        <div class="dept">未选择</div>
+                    </div>
+                    <i class="ri-close-line" onclick="clearSelectedPerson()"></i>
+                </div>
+            </div>
+
+            <!-- 调休时间选择 -->
+            <div class="form-item">
+                <label>调日期</label>
+                <input type="date" id="adjustRestDate" required>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>开始时间</label>
+                    <input type="time" id="adjustRestStartTime" required>
+                </div>
+                <div class="info-half">
+                    <label>结束时间</label>
+                    <input type="time" id="adjustRestEndTime" required>
+                </div>
+            </div>
+
+            <!-- 调休班次选择 -->
+            <div class="form-item">
+                <label>调休班次</label>
+                <div class="shift-type-grid">
+                    <div class="shift-type-item">
+                        <span>早班</span>
+                        <small>08:00-17:00</small>
+                    </div>
+                    <div class="shift-type-item">
+                        <span>中班</span>
+                        <small>12:00-21:00</small>
+                    </div>
+                    <div class="shift-type-item">
+                        <span>晚班</span>
+                        <small>16:00-01:00</small>
+                    </div>
+                    <div class="shift-type-item">
+                        <span>大夜班</span>
+                        <small>23:00-08:00</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 调休原因 -->
+            <div class="form-item">
+                <label>调休原因</label>
+                <textarea id="adjustRestReason" placeholder="请输入调休原因" required></textarea>
+            </div>
+
+            <button class="submit-btn" onclick="submitAdjustRestForm()">提交申请</button>
+        </div>
+    </div>
+
+    <!-- 添加员工选择弹窗 -->
+    <div class="modal-overlay" id="employeeSelector">
+        <div class="modal-content employee-selector">
+            <div class="selector-header">
+                <span>选择被调休人</span>
+                <i class="ri-close-line" onclick="closeEmployeeSelector()"></i>
+            </div>
+            <div class="search-bar">
+                <i class="ri-search-line"></i>
+                <input type="text" placeholder="搜索姓名/工号" oninput="searchEmployee(this.value)">
+            </div>
+            <div class="employee-list">
+                <div class="department-title">总经办</div>
+                <div class="employee-items" id="employeeList">
+                    <!-- 员工列表将通过 JavaScript 动态添加 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加排休申请页面 -->
+    <div id="scheduleRestPage" class="schedule-rest-container" style="display: none;">
+        <div class="page-header">
+            <i class="ri-arrow-left-line" onclick="closeScheduleRestForm()"></i>
+            <span>排休申请</span>
+        </div>
+        
+        <div class="schedule-rest-form">
+            <!-- 基本信息部分 -->
+            <div class="form-item">
+                <label>申请编号</label>
+                <input type="text" id="scheduleRestId" readonly>
+            </div>
+            <div class="form-item">
+                <label>申请时间</label>
+                <input type="text" id="scheduleRestApplyTime" readonly>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>姓名</label>
+                    <input type="text" value="姚家荣" readonly>
+                </div>
+                <div class="info-half">
+                    <label>工号</label>
+                    <input type="text" value="12001" readonly>
+                </div>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>部门</label>
+                    <input type="text" value="总经办" readonly>
+                </div>
+                <div class="info-half">
+                    <label>职级</label>
+                    <input type="text" value="M1" readonly>
+                </div>
+            </div>
+
+            <!-- 日期选择部分 -->
+            <div class="form-item">
+                <label>选择排休日期</label>
+                <div class="week-selector">
+                    <div class="week-header">
+                        <i class="ri-arrow-left-s-line" onclick="previousWeek()"></i>
+                        <span id="weekRange">2023年12月4日 - 12月10日</span>
+                        <i class="ri-arrow-right-s-line" onclick="nextWeek()"></i>
+                    </div>
+                    <div class="days-grid" id="daysGrid">
+                        <!-- 日期格子将通过 JavaScript 动态生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 已选择日期显示 -->
+            <div class="form-item">
+                <label>已选择日期</label>
+                <div class="selected-dates" id="selectedDates">
+                    <!-- 选中的日期将在这里显示 -->
+                </div>
+            </div>
+
+            <!-- 排休原因 -->
+            <div class="form-item">
+                <label>排休原因</label>
+                <textarea id="scheduleRestReason" placeholder="请输入排休原因" required></textarea>
+            </div>
+
+            <button class="submit-btn" onclick="submitScheduleRestForm()">提交申请</button>
+        </div>
+    </div>
+
+    <!-- 修改换班申请页面标题和相关文本 -->
+    <div id="shiftChangePage" class="shift-change-container" style="display: none;">
+        <div class="page-header">
+            <i class="ri-arrow-left-line" onclick="closeShiftChangeForm()"></i>
+            <span>换班申请</span>
+        </div>
+        
+        <div class="shift-change-form">
+            <div class="form-item">
+                <label>申请编号</label>
+                <input type="text" id="shiftChangeId" readonly>
+            </div>
+            <div class="form-item">
+                <label>申请时间</label>
+                <input type="text" id="shiftChangeApplyTime" readonly>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>姓名</label>
+                    <input type="text" value="姚家荣" readonly>
+                </div>
+                <div class="info-half">
+                    <label>工号</label>
+                    <input type="text" value="12001" readonly>
+                </div>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>部门</label>
+                    <input type="text" value="总经办" readonly>
+                </div>
+                <div class="info-half">
+                    <label>职级</label>
+                    <input type="text" value="M1" readonly>
+                </div>
+            </div>
+
+            <!-- 被换班人选择 -->
+            <div class="form-item">
+                <label>被换班人</label>
+                <div class="select-person" onclick="showEmployeeSelector()">
+                    <i class="ri-add-line"></i>
+                    <span>选择被换班人</span>
+                </div>
+            </div>
+            <div class="form-item user-info-flex target-info" style="display: none;">
+                <div class="selected-person">
+                    <img src="https://s1.imagehub.cc/images/2024/12/01/2cb9218af26caa69cf1cb58b96431647.png" class="avatar" alt="avatar">
+                    <div class="person-info">
+                        <div class="name">未选择</div>
+                        <div class="dept">未选择</div>
+                    </div>
+                    <i class="ri-close-line" onclick="clearSelectedPerson()"></i>
+                </div>
+            </div>
+
+            <!-- 换班时间选择 -->
+            <div class="form-item">
+                <label>换班日期</label>
+                <input type="date" id="shiftChangeDate" required>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>开始时间</label>
+                    <input type="time" id="shiftChangeStartTime" required>
+                </div>
+                <div class="info-half">
+                    <label>结束时间</label>
+                    <input type="time" id="shiftChangeEndTime" required>
+                </div>
+            </div>
+
+            <!-- 换班班次选择 -->
+            <div class="form-item">
+                <label>换班班次</label>
+                <div class="shift-type-grid">
+                    <div class="shift-type-item">
+                        <span>早班</span>
+                        <small>08:00-17:00</small>
+                    </div>
+                    <div class="shift-type-item">
+                        <span>中班</span>
+                        <small>12:00-21:00</small>
+                    </div>
+                    <div class="shift-type-item">
+                        <span>晚班</span>
+                        <small>16:00-01:00</small>
+                    </div>
+                    <div class="shift-type-item">
+                        <span>大夜班</span>
+                        <small>23:00-08:00</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 换班原因 -->
+            <div class="form-item">
+                <label>换班原因</label>
+                <textarea id="shiftChangeReason" placeholder="请输入换班原因" required></textarea>
+            </div>
+
+            <button class="submit-btn" onclick="submitShiftChangeForm()">提交申请</button>
+        </div>
+    </div>
+
+    <!-- 添加加班申请页面 -->
+    <div id="overtimePage" class="overtime-container" style="display: none;">
+        <div class="page-header">
+            <i class="ri-arrow-left-line" onclick="closeOvertimeForm()"></i>
+            <span>加班申请</span>
+        </div>
+        
+        <div class="overtime-form">
+            <!-- 基本信息部分 -->
+            <div class="form-item">
+                <label>申请编号</label>
+                <input type="text" id="overtimeId" readonly>
+            </div>
+            <div class="form-item">
+                <label>申请时间</label>
+                <input type="text" id="overtimeApplyTime" readonly>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>姓名</label>
+                    <input type="text" value="姚家荣" readonly>
+                </div>
+                <div class="info-half">
+                    <label>工号</label>
+                    <input type="text" value="12001" readonly>
+                </div>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>部门</label>
+                    <input type="text" value="总经办" readonly>
+                </div>
+                <div class="info-half">
+                    <label>职级</label>
+                    <input type="text" value="M1" readonly>
+                </div>
+            </div>
+
+            <!-- 加班类型选择 -->
+            <div class="form-item">
+                <label>加班类型</label>
+                <div class="overtime-type-grid">
+                    <div class="overtime-type-item" onclick="selectOvertimeType(this, '节假日加班')">
+                        <div class="radio-circle"></div>
+                        <span>节假日加班</span>
+                    </div>
+                    <div class="overtime-type-item" onclick="selectOvertimeType(this, '周末加班')">
+                        <div class="radio-circle"></div>
+                        <span>周末加班</span>
+                    </div>
+                    <div class="overtime-type-item" onclick="selectOvertimeType(this, '临时加班')">
+                        <div class="radio-circle"></div>
+                        <span>临时加班</span>
+                    </div>
+                    <div class="overtime-type-item" onclick="selectOvertimeType(this, '上级通知加班')">
+                        <div class="radio-circle"></div>
+                        <span>上级通知加班</span>
+                    </div>
+                    <div class="overtime-type-item" onclick="selectOvertimeType(this, '活动延迟加班')">
+                        <div class="radio-circle"></div>
+                        <span>活动延迟加班</span>
+                    </div>
+                    <div class="overtime-type-item" onclick="selectOvertimeType(this, '其他加班')">
+                        <div class="radio-circle"></div>
+                        <span>其他加班</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 加班时间选择 -->
+            <div class="form-item">
+                <label>加班日期</label>
+                <input type="date" id="overtimeDate" required>
+            </div>
+            <div class="form-item user-info-flex">
+                <div class="info-half">
+                    <label>开始时间</label>
+                    <input type="time" id="overtimeStartTime" required>
+                </div>
+                <div class="info-half">
+                    <label>结束时间</label>
+                    <input type="time" id="overtimeEndTime" required>
+                </div>
+            </div>
+
+            <!-- 加班原因 -->
+            <div class="form-item">
+                <label>加班原因</label>
+                <textarea id="overtimeReason" placeholder="请输入加班原因" required></textarea>
+            </div>
+
+            <button class="submit-btn" onclick="submitOvertimeForm()">提交申请</button>
+        </div>
+    </div>
+
+    <!-- 添加公告列表容器 -->
+    <div class="article-container">
+        <div class="article-header">
+            <span class="title">公告</span>
+            <span class="more">更多 <i class="ri-arrow-right-s-line"></i></span>
+        </div>
+        <div class="article-list">
+            <div class="article-item">
+                <div class="article-info">
+                    <div class="article-title">关于2024年元旦放假安排的通知</div>
+                    <div class="article-meta">
+                        <span class="time">2023-12-25</span>
+                        <span class="author">行政部</span>
+                    </div>
+                </div>
+                <div class="article-status new">新</div>
+            </div>
+            <div class="article-item">
+                <div class="article-info">
+                    <div class="article-title">关于开展年度员工满意度调查的通知</div>
+                    <div class="article-meta">
+                        <span class="time">2023-12-20</span>
+                        <span class="author">人事部</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加制度详情页面 -->
+    <div id="regulationDetailPage" class="regulation-detail-container" style="display: none;">
+        <div class="page-header">
+            <i class="ri-arrow-left-line" onclick="closeRegulationDetail()"></i>
+            <span>员工手册V2.0</span>
+        </div>
+        
+        <div class="regulation-detail">
+            <div class="regulation-info">
+                <div class="info-row">
+                    <span class="department"><i class="ri-user-3-line"></i>人事部</span>
+                    <span class="time"><i class="ri-time-line"></i>2023-12-25 14:30</span>
+                    <span class="views"><i class="ri-eye-line"></i>238次阅读</span>
+                </div>
+                <div class="tag-row">
+                    <span class="tag">必读</span>
+                    <span class="tag">规章制度</span>
+                </div>
+            </div>
+
+            <div class="regulation-content">
+                <h2>第一章 总则</h2>
+                <section>
+                    <h3>1.1 手册目的</h3>
+                    <p>为规范公司管理，明确员工权利与义务，特制定本手册。本手册适用于公司所有正式员工。</p>
+                </section>
+
+                <section>
+                    <h3>1.2 公司文化</h3>
+                    <p>企业使命：创新科技，服务社会</p>
+                    <p>企业愿景：成为行业领先的科技服务商</p>
+                    <p>核心价值观：诚信、创新、协作、卓越</p>
+                </section>
+
+                <h2>第二章 工作规范</h2>
+                <section>
+                    <h3>2.1 工作时间</h3>
+                    <p>实行标准工时制，每周工作40小时，实行双休日制度。</p>
+                    <ul>
+                        <li>上午：09:00-12:00</li>
+                        <li>下午：13:30-18:30</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>2.2 考勤制度</h3>
+                    <p>员工需按时打卡，迟到、早退累计三次视为旷工一天。特殊情况需提前请假。</p>
+                </section>
+
+                <h2>第三章 薪酬福利</h2>
+                <section>
+                    <h3>3.1 薪酬构成</h3>
+                    <p>员工薪酬由基本工资、岗位工资、绩效工资和各项补贴组。</p>
+                </section>
+
+                <section>
+                    <h3>3.2 福利待遇</h3>
+                    <ul>
+                        <li>五险一金</li>
+                        <li>带薪年假</li>
+                        <li>节日福利</li>
+                        <li>团队建设</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html> 
